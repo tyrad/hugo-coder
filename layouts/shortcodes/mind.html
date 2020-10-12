@@ -1,4 +1,4 @@
-{{/*   
+{{/*
     参考 https://wocai.de/post/2019/03/hugo-%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/
     todo: 添加全屏按钮并点击显示  80hw hv
     {{% mind mindid %}}
@@ -10,12 +10,12 @@
     {{% /mind %}}
 */}}
 
-<link href='{{"mindmap/kityminder.core.css" | relURL}}' type="text/css" rel="stylesheet" />
+{{/*<link href='{{"mindmap/kityminder.core.css" | relURL}}' type="text/css" rel="stylesheet" />*/}}
 <link href='{{"mindmap/mindmap.css" | relURL}}' type="text/css" rel="stylesheet" />
-<script src='{{"mindmap/kity.min.js" | relURL}}'></script> 
-<script src='{{"mindmap/kityminder.core.min.js" | relURL}}'></script> 
-<script src='{{"mindmap/jquery.slim.min.js" | relURL}}'></script> 
-<script src='{{"mindmap/mindmap.js" | relURL}}'></script> 
+<script src='{{"mindmap/kity.min.js" | relURL}}'></script>
+<script src='{{"mindmap/kityminder.core.min.js" | relURL}}'></script>
+<script src='{{"mindmap/jquery.slim.min.js" | relURL}}'></script>
+<script src='{{"mindmap/mindmap.js" | relURL}}'></script>
 
 <div id="{{ .Get 0 }}" class="mindmap mindmap-md" style="width: 100%;">
     {{- .Inner | markdownify -}}
