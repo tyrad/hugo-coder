@@ -1,4 +1,5 @@
 **/themes/
 demo/
 .hugo/*
-!.hugo/version
+!.hugo/version 
+.DS_Store

@@ -1,0 +1,194 @@
+{{- define "content" -}}
+
+  <style>
+    html > body {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .content {
+      margin: 0 auto;
+    }
+
+    .wiki-category-name {
+      float: right;
+      text-align: right;
+      word-wrap: break-word;
+    }
+
+    .wiki-category-list li.pagelist {
+      width: 85%;
+      margin-right: 1.5em;
+    }
+
+    li {
+      display: list-item;
+      text-align: -webkit-match-parent;
+    }
+
+    .wiki-category-list ul {
+      padding-left: 1em;
+    }
+
+    .wiki-category {
+      border-bottom: 1px solid #ccc;
+      min-height: 3em;
+    }
+
+    .wiki-category:last-child {
+      border-bottom: none;
+    }
+
+    .pagelist a {
+      /*color: #555;*/
+    }
+
+    .wiki-category-list ul li {
+      margin-top: 0;
+    }
+
+    .wiki-category-name {
+      margin-top: 0;
+    }
+
+    .wiki-collection {
+      font-weight: 500;
+    }
+
+    @media only screen and (max-width: 1000px) {
+      /*主内容700px宽度*/
+      #toc {
+        display: none;
+      }
+    }
+
+    .wiki-category-name {
+      padding-top: 100px;
+      margin-top: -100px;
+    }
+
+    #TableOfContents {
+      margin-top: 40px;
+    }
+
+    #wiki-content a {
+      color: #333333;
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell,
+      Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica Neue, PingFang SC,
+      Hiragino Sans GB, Microsoft YaHei, Arial;
+      font-weight: 400;
+    }
+  </style>
+
+  <section id="start">
+    <section id="body-wrapper" class="">
+      <div style="max-width:768px;margin: 0 auto;" id="wiki-content">
+        {{- $sch_all_dir_kv := newScratch -}}
+        {{- $sch_all_names := newScratch -}}
+        {{- range (readDir "/content/wiki/") -}}
+          {{- if .IsDir -}}
+            {{- $dirName := .Name -}}
+            {{- $sch_dir_item :=  newScratch -}}
+            {{- $sch_dir_item.Set "Name" .Name -}}
+            {{- $sch_all_names.Add "names" (slice .Name) -}}
+            {{- $sch_collection_names :=  newScratch -}}
+            {{- $sch_collection_post_kvs :=  newScratch -}}
+            {{ $sch_collection_kvs :=  newScratch }}
+            {{- range (readDir (printf "/content/wiki/%s" .Name) ) -}}
+              {{- with $.Site.GetPage (printf "/wiki/%s/%s" $dirName .Name) -}}
+                {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
+                {{- $title :=  .Title -}}
+                {{- with .Params.collection -}}
+                  {{- $sch_collection_names.Add "names"  (slice . ) -}}
+                  {{- $sch_collection_kvs.Add . (slice $title ) -}}
+                {{- else -}}
+                  {{- $sch_collection_kvs.Add "" (slice $title ) -}}
+                {{- end -}}
+              {{- end -}}
+            {{- end -}}
+            {{- $sch_dir_item.Set "sch_collection_names" $sch_collection_names -}}
+            {{ $sch_dir_item.Set "sch_collection_post_kvs" $sch_collection_post_kvs }}
+            {{- $sch_dir_item.Set "sch_collection_kvs" $sch_collection_kvs -}}
+            {{- $sch_all_dir_kv.Set .Name $sch_dir_item -}}
+            {{- $sch_collection_names   = newScratch -}}
+            {{- $sch_collection_post_kvs =  newScratch -}}
+            {{- $sch_collection_kvs =  newScratch -}}
+          {{- end -}}
+        {{- end -}}
+        <!-- 忽略大小写排序 -->
+        {{- $.Scratch.Delete "lower_titles" -}}
+        {{- range $sch_all_names.Get "names" -}}
+          {{- $.Scratch.Add "lower_titles" (slice ( lower . ) ) -}}
+        {{- end -}}
+
+        {{- range sort ($.Scratch.Get "lower_titles") -}}
+          {{- $lower_int := . -}}
+          {{- range sort ($sch_all_names.Get "names") -}}
+            {{- if eq $lower_int (lower .) -}}
+              <div class="wiki-category">
+                <h3 class="wiki-category-name" id="{{- lower . -}}">{{.}}</h3>
+                <div class="wiki-category-list">
+                  <ul>
+                    {{- $item := $sch_all_dir_kv.Get . -}}
+                    {{-  $sch_collection_kvs := $item.Get "sch_collection_kvs" -}}
+                    {{-  $sch_collection_post_kvs := $item.Get "sch_collection_post_kvs" -}}
+                    {{-  $sch_collection_names := $item.Get "sch_collection_names" -}}
+                    {{- range sort ($sch_collection_kvs.Get "") -}}
+
+                      <li class="pagelist">
+                        <a href="{{ $sch_collection_post_kvs.Get . }}">{{.}}</a>
+                      </li>
+                    {{- end -}}
+
+                    {{- range sort (uniq ($sch_collection_names.Get "names")) -}}
+                      <li class="pagelist">
+                        <span class="wiki-collection">{{- . -}}&nbsp;:&nbsp;</span>
+                        {{- $lxist := sort ($sch_collection_kvs.Get . ) -}}
+                        {{- range $index, $element := $lxist -}}
+                          {{ if not (eq  $index 0 )}}
+                            &nbsp;/&nbsp;
+                          {{ end }}
+                          <a href="{{ $sch_collection_post_kvs.Get . }}">{{ $element }}</a>
+                        {{- end -}}
+                      </li>
+                    {{- end -}}
+                  </ul>
+                </div>
+              </div>
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+
+      </div>
+
+
+      <script>
+        window.onload = function (e) {
+          let orgHtmls = document.querySelectorAll('.wiki-category-name');
+          let titles = [];
+          for (let item of orgHtmls) {
+            titles.push(item.innerHTML)
+          }
+          let html = '<div id="toc" style="padding-top:1rem;padding-right: 40px;overflow: auto;left: calc(50% + 420px);" class="sidebar-content toc-fixed"><nav id="TableOfContents"><ul>';
+          for (let title of titles) {
+            html += `<li><a href="#${title.toLowerCase()}">${title}</a></li>`;
+          }
+          html += '</ul></nav></div>';
+          document.getElementById('wiki-content').insertAdjacentHTML('afterend', html);
+
+          $(window).bind("scroll", function () {
+            let scrollTop = $(this).scrollTop()
+            for (let seg of orgHtmls) {
+              if (seg.offsetTop - 100 > scrollTop) {
+                continue;
+              }
+              $("#toc a").removeClass("highlighted")
+              let link = "#" + $(seg).attr("id")
+              $('#toc a[href="' + link + '"]').addClass("highlighted")
+            }
+          });
+        }
+      </script>
+    </section>
+  </section>
+{{ end }}

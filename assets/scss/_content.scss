@@ -79,7 +79,6 @@
     table {
       width: 100%;
       margin: 0 0 1.2em;
-      word-break: keep-all;
       word-break: normal;
       overflow: auto;
       border: none;
@@ -98,7 +97,6 @@
         list-style: disc;
         * {
           margin: 0;
-          text-align: left;
           text-align: initial;
         }
       }
@@ -111,7 +109,6 @@
         list-style: decimal;
         * {
           margin: 0;
-          text-align: left;
           text-align: initial;
         }
       }
@@ -289,7 +286,6 @@
 
     h1,
     h2 {
-      padding-top: 27.2px;
       padding-top: 1.7rem;
       padding-bottom: 19.2px;
       padding-bottom: 1.2rem;
