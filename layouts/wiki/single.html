@@ -2,7 +2,7 @@
   {{ .Title }} · {{ .Site.Title }}
 {{ end }}
 {{ define "content" }}
-  <section class="container post">
+  <aside class="container post">
     <article>
       <header>
         <div class="post-title">
@@ -20,40 +20,61 @@
               <i class="fa fa-clock-o" aria-hidden="true"></i>
               {{ i18n "reading_time" .ReadingTime }}
             </span>
+            <span class="breadcrumbs">
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+                {{ $.Scratch.Set "path" "" }}
+              {{ $url := replace .Permalink ( printf "%s" .Site.BaseURL) "" }}
+              {{ $url  = strings.TrimPrefix "/" $url }}
+              {{ $.Scratch.Add "path" .Site.BaseURL }}
+              {{ range $index, $element := split $url "/" }}
+                {{ if ne $element "" }}
+                  {{ if eq $index  0 }}
+                    {{ $.Scratch.Add "path" (printf "/%s" $element) }}
+                    <span><a href='{{ $.Scratch.Get "path" }}'>{{ . }}</a></span> &nbsp/&nbsp
+                  {{ else if eq $index 1}}
+                    {{ $.Scratch.Add "path" (printf "#%s" $element) }}
+                    <span><a href='{{ $.Scratch.Get "path" }}'>{{ . }}</a></span>
+                  {{ else if $.Params.collection }}
+                    &nbsp/&nbsp<span>{{$.Params.collection}}</span>
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            </span>
           </div>
           {{ with .Page.Params.Categories }}{{ partial "taxonomy/categories.html" . }}{{ end }}
           {{ with .Page.Params.Tags }}{{ partial "taxonomy/tags.html" . }}{{ end }}
         </div>
       </header>
-
       <div>
         {{ if .Params.featured_image }}
           <img src='{{ .Params.featured_image }}' alt="Featured image"/>
         {{ end }}
 
-        <aside id="body-wrapper" >  
-          {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}            
+        <aside id="body-wrapper">
+          {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}
             <div class="body-content co-width-10">
+              {{ .Content }}
+            </div>
           {{ else }}
-            <div class="body-content">
+            <div class="body-content co-width-12">
+              {{ .Content }}
+            </div>
           {{end}}
-            {{ .Content }}
-          </div>
-         {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}
-          <div class="sidebar co-width-2"  style="padding-left: 12px;">
-              <div id="toc-slider">                              
-                {{ .TableOfContents }} 
+          {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}
+            <div class="sidebar co-width-2" style="padding-left: 12px;">
+              <div id="toc-slider">
+                {{ .TableOfContents }}
                 {{ if .Site.IsServer }}
-                  {{ $script := resources.Get "js/toc.js" }}
-                    <script src="{{ $script.RelPermalink }}"></script>
-                  {{ else }}
+                {{ $script := resources.Get "js/toc.js" }}
+                <script src="{{ $script.RelPermalink }}"></script>
+                {{ else }}
                 {{ $script := resources.Get "js/toc.js" | minify | fingerprint }}
-                    <script src="{{ $script.RelPermalink }}"></script>
+                <script src="{{ $script.RelPermalink }}"></script>
                 {{ end }}
               </div>
-            </div>  
-          {{ end }}                  
-        </section>        
+            </div>
+          {{ end }}
+        </aside>
       </div>
 
       <footer>
@@ -65,5 +86,5 @@
     </article>
 
     {{ partial "posts/math.html" . }}
-  </section>
+  </aside>
 {{ end }}

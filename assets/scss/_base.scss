@@ -1,12 +1,12 @@
 *,
 *:after,
 *:before {
-	box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 html {
-	box-sizing: border-box;
-	font-size: 62.5%;
+  box-sizing: border-box;
+  font-size: 62.5%;
 }
 
 body {
@@ -16,10 +16,10 @@ body {
   text-rendering: optimizelegibility;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
-	font-size: 1.6em;
-	font-weight: 300;
+  font-size: 1.6em;
+  font-weight: 300;
   line-height: 1.8em;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 1.6em;
     line-height: 1.6em;
   }
@@ -29,6 +29,7 @@ a {
   font-weight: 300;
   color: $link-color;
   text-decoration: none;
+
   &:focus,
   &:hover {
     text-decoration: underline;
@@ -54,47 +55,52 @@ h6 {
 h1 {
   font-size: 3.2rem;
   line-height: 3.6rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 3.0rem;
     line-height: 3.4rem;
   }
 }
+
 h2 {
   font-size: 2.8rem;
   line-height: 3.2rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 2.6rem;
     line-height: 3.0rem;
   }
 }
+
 h3 {
   font-size: 2.4rem;
   line-height: 2.8rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 2.2rem;
     line-height: 2.6rem;
   }
 }
+
 h4 {
   font-size: 2.2rem;
   line-height: 2.6rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 2.0rem;
     line-height: 2.4rem;
   }
 }
+
 h5 {
   font-size: 2.0rem;
   line-height: 2.4rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 1.8rem;
     line-height: 2.2rem;
   }
 }
+
 h6 {
   font-size: 1.8rem;
   line-height: 2.2rem;
-  @media only screen and (max-width : 768px) {
+  @media only screen and (max-width: 768px) {
     font-size: 1.6rem;
     line-height: 2.0rem;
   }
@@ -119,6 +125,7 @@ pre {
   line-height: 2.6rem;
   overflow-x: auto;
   margin: 0;
+
   code {
     display: inline-block;
     background-color: inherit;
@@ -145,22 +152,28 @@ blockquote {
 th, td {
   padding: 1.6rem;
 }
+
 table {
   border-collapse: collapse;
 }
+
 table td, table th {
   border: 2px solid $alt-fg-color;
 }
+
 table tr:first-child th {
   border-top: 0;
 }
+
 table tr:last-child td {
   border-bottom: 0;
 }
+
 table tr td:first-child,
 table tr th:first-child {
   border-left: 0;
 }
+
 table tr td:last-child,
 table tr th:last-child {
   border-right: 0;

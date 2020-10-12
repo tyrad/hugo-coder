@@ -176,15 +176,35 @@
           html += '</ul></nav></div>';
           document.getElementById('wiki-content').insertAdjacentHTML('afterend', html);
 
-          $(window).bind("scroll", function () {
-            let scrollTop = $(this).scrollTop()
-            for (let seg of orgHtmls) {
-              if (seg.offsetTop - 100 > scrollTop) {
-                continue;
+          window.addEventListener("scroll", function (e) {
+            let scrollTop = window.pageYOffset;
+            for (let i = 0; i < orgHtmls.length; i++) {
+              const seg = orgHtmls[i];
+              let nextSeg = orgHtmls.length > i + 1 ? orgHtmls[i + 1] : null;
+              let currentTag = null;
+              if (nextSeg) {
+                if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {
+                  currentTag = seg;
+                }
+              } else {
+                if (scrollTop > seg.offsetTop - 40) {
+                  currentTag = seg;
+                }
               }
-              $("#toc a").removeClass("highlighted")
-              let link = "#" + $(seg).attr("id")
-              $('#toc a[href="' + link + '"]').addClass("highlighted")
+              if (currentTag) {
+                let element = document
+                        .getElementById("toc")
+                        .querySelectorAll("a");
+                for (const ele of element) {
+                  ele.classList.remove("highlighted");
+                }
+                let ele2 = document
+                        .getElementById("toc")
+                        .querySelector("a[href='#" + seg.id + "']");
+                if (ele2) {
+                  ele2.classList.add("highlighted");
+                }
+              }
             }
           });
         }

@@ -3,12 +3,14 @@
   display: flex;
   margin-top: 1.6rem;
   margin-bottom: 3.2rem;
+
   article {
     width: 100%;
     word-break: break-word;
     font-size: 25.6px;
     font-size: 1.6rem;
     line-height: 1.6;
+
     h1,
     h1 *,
     h2,
@@ -23,9 +25,11 @@
     h6 * {
       word-break: break-all;
     }
+
     header {
       margin-top: 6.4rem;
       margin-bottom: 3.2rem;
+
       h1 {
         font-size: 4.2rem;
         line-height: 4.6rem;
@@ -36,24 +40,30 @@
         }
       }
     }
+
     footer {
       margin-top: 4rem;
+
       .see-also {
         margin: 3.2rem 0;
+
         h3 {
           margin: 3.2rem 0;
         }
       }
     }
+
     div,
     p {
       text-align: justify;
       text-justify: auto;
       hyphens: auto;
     }
+
     a:hover {
       background: transparent;
     }
+
     img {
       margin: 10px;
       padding: 5px;
@@ -62,6 +72,7 @@
       border: 1px solid #bbb;
       box-shadow: 1px 1px 3px #d4d4d4;
     }
+
     blockquote {
       display: block;
       position: relative;
@@ -69,61 +80,74 @@
       text-align: left;
       line-height: inherit;
     }
+
     blockquote:before {
       position: absolute;
     }
+
     blockquote * {
       margin: 0;
       font-size: inherit;
     }
+
     table {
       width: 100%;
       margin: 0 0 1.2em;
       word-break: normal;
       overflow: auto;
       border: none;
+
       td,
       th {
         border: none;
       }
     }
+
     ul {
       margin: 0 0 1.2em;
       margin-left: 1.3em;
       padding: 0;
       list-style: disc;
+
       li {
         font-size: inherit;
         list-style: disc;
+
         * {
           margin: 0;
           text-align: initial;
         }
       }
     }
+
     ol {
       list-style: decimal;
       margin: 0;
       padding: 0;
+
       li {
         list-style: decimal;
+
         * {
           margin: 0;
           text-align: initial;
         }
       }
     }
+
     li ol,
     li ul {
       margin-bottom: 0.8em;
       margin-left: 2em;
     }
+
     li ul {
       list-style: circle;
     }
+
     pre {
       font-family: Consolas, Monaco, Andale Mono, Source Code Pro,
-        Liberation Mono, Courier, monospace;
+      Liberation Mono, Courier, monospace;
       display: block;
       padding: 15px;
       line-height: 1.5;
@@ -131,21 +155,25 @@
       word-wrap: break-word;
       white-space: pre;
       overflow: auto;
+
       code {
         margin: 0;
         padding: 0;
       }
+
       code,
       code * {
         font-size: 15px;
       }
     }
+
     li pre code,
     p pre code,
     pre {
       background-color: transparent;
       border: none;
     }
+
     pre p {
       margin: 0;
       padding: 0;
@@ -161,23 +189,27 @@
       -webkit-box-pack: center;
       -webkit-box-orient: vertical;
     }
+
     .article-center-small {
       display: -webkit-inline-box;
       display: -ms-inline-flexbox;
       display: inline-flex;
     }
+
     .article-center-small img {
       margin: 0;
       padding: 0;
       border: 0;
       box-shadow: none;
     }
+
     .article-nobeautify {
       margin: 0;
       padding: 0;
       border: 0;
       box-shadow: 0 0 0;
     }
+
     h1,
     h2,
     h3,
@@ -192,72 +224,87 @@
       text-align: left;
       color: $fg-color;
     }
+
     h1 {
       padding-bottom: 0.3em;
       font-size: 57.6px;
       font-size: 3.6rem;
       line-height: 1.2;
     }
+
     h2 {
       padding-bottom: 0.3em;
       font-size: 44.8px;
       font-size: 2.8rem;
       line-height: 1.225;
     }
+
     h3 {
       font-size: 38.4px;
       font-size: 2.4rem;
       line-height: 1.43;
     }
+
     h4 {
       font-size: 32px;
       font-size: 2rem;
     }
+
     h5,
     h6 {
       font-size: 25.6px;
       font-size: 1.6rem;
     }
+
     h6 {
       color: #777;
     }
+
     ol,
     ul {
       list-style-type: disc;
       padding: 0;
       padding-left: 2em;
     }
+
     ol ol,
     ul ol {
       list-style-type: lower-roman;
     }
+
     ol ol ol,
     ol ul ol,
     ul ol ol,
     ul ul ol {
       list-style-type: lower-alpha;
     }
+
     table {
       width: 100%;
       overflow: auto;
       word-break: normal;
       word-break: keep-all;
+
       tr {
         background-color: #fff;
         border-top: 1px solid #ccc;
       }
+
       th {
         font-weight: 700;
       }
+
       td,
       th {
         padding: 6px 13px;
         border: 1px solid #ddd;
       }
     }
+
     blockquote {
       border-left: 4px solid #ddd;
     }
+
     strong {
       font-weight: 600 !important;
       color: #000 !important;
@@ -274,6 +321,7 @@
     pre code * {
       font-size: 15px;
     }
+
     li code,
     p code {
       border-radius: 3px;
@@ -289,10 +337,10 @@
       padding-top: 1.7rem;
       padding-bottom: 19.2px;
       padding-bottom: 1.2rem;
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAABCAYAAACsXeyTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAFUlEQVQIHWNIS0sr/v//PwMMDzY+ADqMahlW4J91AAAAAElFTkSuQmCC)
-        0 100% repeat-x;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAABCAYAAACsXeyTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAFUlEQVQIHWNIS0sr/v//PwMMDzY+ADqMahlW4J91AAAAAElFTkSuQmCC) 0 100% repeat-x;
     }
   }
+
   article,
   article *,
   article div,
@@ -304,8 +352,13 @@
   .co-width-2 {
     width: 16.7%;
   }
+
   .co-width-10 {
     width: 83.3%;
+  }
+
+  .co-width-12 {
+    width: 100%;
   }
 
   .container {
@@ -320,6 +373,7 @@
     .post-title {
       margin-bottom: 0.75em;
     }
+
     .post-meta {
       i {
         text-align: center;
@@ -327,8 +381,9 @@
         margin-left: 0;
         margin-right: 0.5rem;
       }
+
       .date {
-        .posted-on {
+        .posted-on, .reading-time {
           margin-left: 0;
           margin-right: 1.5rem;
         }
@@ -349,6 +404,7 @@
     margin: 0;
     padding: 0;
   }
+
   figcaption p {
     text-align: center;
     font-style: italic;
@@ -371,11 +427,13 @@
     margin: 3.2rem 0 3.2rem 0;
     list-style: none;
     padding: 0;
+
     li {
       font-size: 1.8rem;
       @media only screen and (max-width: 768px) {
         margin: 1.6rem 0 1.6rem 0;
       }
+
       .date {
         display: inline-block;
         flex: 1;
@@ -387,12 +445,14 @@
           text-align: left;
         }
       }
+
       .title {
         font-size: 1.8rem;
         flex: 2;
         color: $fg-color;
         font-family: $heading-font-family;
         font-weight: 700;
+
         &:hover,
         &:focus {
           color: $link-color;
@@ -400,6 +460,7 @@
       }
     }
   }
+
   ul:not(.pagination) {
     li {
       @media only screen and (min-width: 768.1px) {
@@ -413,12 +474,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   .about {
     text-align: center;
+
     h1 {
       margin-top: 2rem;
       margin-bottom: 0.5rem;
     }
+
     h2 {
       margin-top: 1rem;
       margin-bottom: 0.5rem;
@@ -427,26 +491,32 @@
         font-size: 2rem;
       }
     }
+
     ul {
       list-style: none;
       margin: 3rem 0 1rem 0;
       padding: 0;
+
       li {
         display: inline-block;
         position: relative;
+
         a {
           color: $fg-color;
           text-transform: uppercase;
           margin-left: 1rem;
           margin-right: 1rem;
           font-size: 1.6rem;
+
           &:hover,
           &:focus {
             color: $link-color;
           }
+
           @media only screen and (max-width: 768px) {
             font-size: 1.4rem;
           }
+
           i {
             font-size: 3.2rem;
           }
@@ -457,6 +527,7 @@
 
   .error {
     text-align: center;
+
     h1 {
       margin-top: 2rem;
       margin-bottom: 0.5rem;
@@ -465,6 +536,7 @@
         font-size: 3.2rem;
       }
     }
+
     h2 {
       margin-top: 2rem;
       margin-bottom: 3.2rem;
@@ -494,15 +566,18 @@
     font-size: 13px;
     margin-top: 0.4rem;
   }
+
   ul {
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
   }
+
   ul,
   li {
     margin-left: 5px;
     padding-left: 0;
   }
+
   ul ul {
     margin-left: 0.6rem;
   }
@@ -510,9 +585,11 @@
   :hover {
     overflow: auto;
   }
+
   a {
     color: $fg-color-toc;
   }
+
   a.highlighted {
     color: $link-color;
   }
