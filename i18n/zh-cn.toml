@@ -1,11 +1,11 @@
 [category]
-other = "分类"
+other = "Category"
 
 [tag]
-other = "标签"
+other = "Tag"
 
 [series]
-other = "系列"
+other = "Series"
 
 [reading_time]
 one = "1分钟阅读时间"
@@ -21,4 +21,4 @@ other = "此页面不存在"
 other = "返回 <a href=\"{{ . }}\">主页面</a>."
 
 [powered_by]
-other = "技术支持"
+other = "Powered by"
