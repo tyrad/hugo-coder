@@ -1,7 +1,12 @@
 @mixin content_dark {
+  color: #dadada;
+  background-color: #212121;
 
   .content {
-  
+    article strong {
+      color: #dadada !important;
+    }
+
     .list {
       ul {
         li {
@@ -32,15 +37,14 @@
       }
     }
   }
-
 }
 
 body.colorscheme-dark {
-  @include content_dark()
+  @include content_dark();
 }
 
 body.colorscheme-auto {
   @media (prefers-color-scheme: dark) {
-    @include content_dark()
+    @include content_dark();
   }
 }

@@ -12,7 +12,10 @@ html {
 body {
   color: $fg-color;
   background-color: $bg-color;
-	font-family: $text-font-family;
+  font-family: $text-font-family;
+  text-rendering: optimizelegibility;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
 	font-size: 1.6em;
 	font-weight: 300;
   line-height: 1.8em;
