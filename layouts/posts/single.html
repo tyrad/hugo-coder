@@ -30,9 +30,31 @@
         {{ if .Params.featured_image }}
           <img src='{{ .Params.featured_image }}' alt="Featured image"/>
         {{ end }}
-        {{ .Content }}
-      </div>
 
+        <aside id="body-wrapper" >  
+          {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}            
+            <div class="body-content co-width-10">
+          {{ else }}
+            <div class="body-content">
+          {{end}}
+            {{ .Content }}
+          </div>
+         {{- if and (ne (print .TableOfContents)  `<nav id="TableOfContents"></nav>`) (not .Params.hideToc) -}}
+          <div class="sidebar co-width-2"  style="padding-left: 12px;">
+              <div id="toc-slider">                              
+                {{ .TableOfContents }} 
+                {{ if .Site.IsServer }}
+                  {{ $script := resources.Get "js/toc.js" }}
+                    <script src="{{ $script.RelPermalink }}"></script>
+                  {{ else }}
+                {{ $script := resources.Get "js/toc.js" | minify | fingerprint }}
+                    <script src="{{ $script.RelPermalink }}"></script>
+                {{ end }}
+              </div>
+            </div>  
+          {{ end }}                  
+        </section>        
+      </div>
 
       <footer>
         {{ partial "posts/series.html" . }}
