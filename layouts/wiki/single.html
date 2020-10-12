@@ -71,6 +71,9 @@
                 {{ $script := resources.Get "js/toc.js" | minify | fingerprint }}
                 <script src="{{ $script.RelPermalink }}"></script>
                 {{ end }}
+                <a href="#" id="tap-to-top" style="display: inline;">
+                  <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </a>
               </div>
             </div>
           {{ end }}

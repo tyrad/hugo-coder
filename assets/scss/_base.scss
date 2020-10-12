@@ -234,3 +234,22 @@ img.emoji {
   margin: 0 .05em 0 .1em;
   vertical-align: -0.1em;
 }
+
+#tap-to-top {
+  display: none !important;
+  z-index: 90;
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  top: auto;
+  left: auto;
+  color: $bg-color;
+  padding: 10px 16px;
+  border: 1px solid $bg-color;
+  background-color: $fg-color;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
+}
+
+.toc-fixed #tap-to-top {
+  display: inline-block !important;
+}
