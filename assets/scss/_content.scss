@@ -55,8 +55,6 @@
 
     div,
     p {
-      text-align: justify;
-      text-justify: auto;
       hyphens: auto;
     }
 
@@ -137,7 +135,7 @@
 
     li ol,
     li ul {
-      margin-bottom: 0.8em;
+      //margin-bottom: 0.8em;
       margin-left: 2em;
     }
 
@@ -556,7 +554,7 @@
 }
 
 #TableOfContents {
-  padding-left: 5px;
+  padding-left: 12px;
   border-left: rgba(88, 88, 88, 0.1) 2px solid;
   overflow: hidden;
   max-height: calc(100vh - 60px);
