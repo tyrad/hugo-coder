@@ -84,27 +84,60 @@
     <section id="body-wrapper" class="">
       <div style="max-width:768px;margin: 0 auto;" id="wiki-content">
         {{- $sch_all_dir_kv := newScratch -}}
+        {{/* 记录所有的文件夹  */}}
         {{- $sch_all_names := newScratch -}}
+        {{/*  遍历wiki下的目录  */}}
         {{- range (readDir "/content/wiki/") -}}
           {{- if .IsDir -}}
+            {{/* 当前目录的名称，后续拼接地址需要  */}}
             {{- $dirName := .Name -}}
+            {{/* 生成一个map:{ Name:目录名    }  */}}
             {{- $sch_dir_item :=  newScratch -}}
             {{- $sch_dir_item.Set "Name" .Name -}}
+            {{/* 记录所有的文件夹  */}}
             {{- $sch_all_names.Add "names" (slice .Name) -}}
+            {{/* 记录所有的子分类名称  */}}
             {{- $sch_collection_names :=  newScratch -}}
+            {{/* 记录子分类字典  key:文章title value:地址  */}}
             {{- $sch_collection_post_kvs :=  newScratch -}}
+            {{/* 记录分类和title的关系 分类: [title1,title2]*/}}
             {{ $sch_collection_kvs :=  newScratch }}
+            {{/* 遍历子文件夹,例如大分类 iOS*/}}
             {{- range (readDir (printf "/content/wiki/%s" .Name) ) -}}
-              {{- with $.Site.GetPage (printf "/wiki/%s/%s" $dirName .Name) -}}
-                {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
-                {{- $title :=  .Title -}}
-                {{- with .Params.collection -}}
-                  {{- $sch_collection_names.Add "names"  (slice . ) -}}
-                  {{- $sch_collection_kvs.Add . (slice $title ) -}}
-                {{- else -}}
-                  {{- $sch_collection_kvs.Add "" (slice $title ) -}}
+              {{- if .IsDir -}}
+                {{/* 如果有子目录,遍历内容 */}}
+                {{ $ssFolderName := .Name }}
+                {{- range (readDir (printf "/content/wiki/%s/%s" $dirName .Name)) -}}
+                  {{- with $.Site.GetPage (printf "/wiki/%s/%s/%s" $dirName $ssFolderName .Name) -}}
+                    {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
+                    {{/*md的title*/}}
+                    {{- $title :=  .Title -}}
+                    {{/*获取分类collection字段的参数,没有参数则当做空来处理: 处理结果,如果有collection则collection优先,如果没有，则按子目录分配。
+                    可以将判断去掉,以实现按子目录分类（子目录里面的让collection失效）*/}}
+                    {{/*{{- with .Params.collection -}}*/}}
+                    {{/*{{- $sch_collection_names.Add "names"  (slice . ) -}}*/}}
+                    {{/*{{- $sch_collection_kvs.Add . (slice $title ) -}}*/}}
+                    {{/*{{- else -}}*/}}
+                    {{- $sch_collection_names.Add "names" (slice $ssFolderName ) -}}
+                    {{- $sch_collection_kvs.Add $ssFolderName (slice $title ) -}}
+                    {{/*{{- end -}}*/}}
+                  {{- end -}}
                 {{- end -}}
-              {{- end -}}
+              {{ else }}
+                {{/* 获取文件的详情。从这里入手,可以判断下是否是目录。 */}}
+                {{- with $.Site.GetPage (printf "/wiki/%s/%s" $dirName .Name) -}}
+                  {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
+                  {{/*md的title*/}}
+                  {{- $title :=  .Title -}}
+                  {{/*获取分类collection字段的参数,没有参数则当做空来处理*/}}
+                  {{- with .Params.collection -}}
+                    {{- $sch_collection_names.Add "names"  (slice . ) -}}
+                    {{- $sch_collection_kvs.Add . (slice $title ) -}}
+                  {{- else -}}
+                    {{- $sch_collection_kvs.Add "" (slice $title ) -}}
+                  {{- end -}}
+                {{- end -}}
+              {{ end }}
             {{- end -}}
             {{- $sch_dir_item.Set "sch_collection_names" $sch_collection_names -}}
             {{ $sch_dir_item.Set "sch_collection_post_kvs" $sch_collection_post_kvs }}

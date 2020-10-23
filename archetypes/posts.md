@@ -1,7 +1,7 @@
 ---
 draft : false
 date : {{ .Date }}
-title : ""
+title : "{{ replace .Name "-" " " | title }}"
 description : ""
 slug : "" 
 tags : []
