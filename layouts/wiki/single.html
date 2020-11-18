@@ -2,7 +2,10 @@
   {{ .Title }} · {{ .Site.Title }}
 {{ end }}
 {{ define "content" }}
-  <aside class="container post">
+
+{{ partial "wikiCategroy.html" . }}
+ 
+<aside class="container post">
     <article>
       <header>
         <div class="post-title">

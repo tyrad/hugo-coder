@@ -1,0 +1,35 @@
+{{ define "title" }}
+  {{ title (i18n (lower .Title)) | default .Title }} · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+<section class="container list">
+  <h1 class="title"> {{ title (i18n (lower .Title)) | default .Title }} </h1>
+  <ul>
+
+
+    {{- range (where .Site.RegularPages "Section" "wiki") -}}
+{{/*    {{ range (.Paginate .RegularPagesRecursive "Section" "wiki").Pages }}*/}}
+      {{- .Render "li" -}}
+    {{- end -}}
+
+
+{{/*    {{$related := .Paginate  (where site.RegularPages "Section" .Section ) }}*/}}
+{{/*    {{range $related.Pages}}*/}}
+{{/*      {{- .Render "li" -}}*/}}
+{{/*    {{end}}*/}}
+
+
+{{/*    {{ range $value := .Site.Pages.GroupByDate "January 2006" }}*/}}
+{{/*      {{ $url := (index $value.Pages 0).Node.Date.Format "2006/01" | urlize }}*/}}
+{{/*      <li><a href="/{{ $url }}">{{ .Key }}</a></li>*/}}
+{{/*    {{ end }}*/}}
+  </ul>
+
+
+{{/*  {{ partial "pagination.html" . }}*/}}
+
+
+</section>
+{{ end }}
+
+

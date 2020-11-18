@@ -1,0 +1,338 @@
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<style>
+  #sidebar {
+    font-weight: 400;
+    display: inline;
+    float: left;
+    visibility: visible;
+    top: 0;
+    left: 0;
+    position: fixed;
+    bottom: 0;
+    font-size: 13px;
+    width: 240px;
+    background-color: #f4f5f7;
+  }
+
+  #sidebar a {
+    font-size: 13px;
+    color: #555555;
+  }
+
+  #sidebar ol,
+  #sidebar ul {
+    list-style: none;
+    padding-left: 20px;
+  }
+
+  #sidebar ul {
+    list-style-type: disc;
+  }
+
+  #sidebar #categories li a,
+  #sidebar #categories li a:hover {
+    display: block;
+    text-decoration: none;
+  }
+
+  #sidebar #categories {
+    /* text-shadow: 0 1px 0 #fff; */
+    font-size: 14px;
+  }
+
+  #sidebar .widget-wrap {
+    padding: 20px;
+  }
+
+  #sidebar .widget-title {
+    margin: 0;
+  }
+
+  /*#sidebar #categories li a,*/
+  /*#sidebar #categories li a:hover {*/
+  /*  display: block;*/
+  /*  text-decoration: none;*/
+  /*}*/
+
+  #sidebar li {
+    list-style-type: none;
+  }
+
+  .widget-title a {
+    color: inherit;
+  }
+
+  body.colorscheme-dark .widget-title a {
+    color: inherit;
+  }
+
+  #sidebar a {
+    color: #555;
+    font-weight: 400;
+  }
+
+  body.colorscheme-dark #sidebar a {
+    color: #dadadd;
+  }
+
+  #sidebar {
+    overflow-y: auto;
+  }
+
+  #sidebar::-webkit-scrollbar {
+    width: 0 !important;
+  }
+
+  #sidebar {
+    -ms-overflow-style: none;
+  }
+
+  #sidebar {
+    overflow: -moz-scrollbars-none;
+  }
+
+  /* 添加 */
+  main.wrapper {
+    margin-left: 240px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 900px) {
+    #sidebar {
+      display: none;
+    }
+
+    main.wrapper {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>
+
+<aside id="sidebar">
+  <div class="widget-wrap" id="categories">
+    <p class="widget-title">
+      <span>WIKI</span>
+      <a id="allExpand" href="#">
+        <i class="fa fa-angle-double-down"></i>
+      </a>
+    </p>
+    <ul style="margin-left: 0; padding-left: 0">
+      <li class="file"><a href="/wiki/">Index</a></li>
+      <li class="file"><a href="/wiki/timeline/">Timeline</a></li>
+      {{- $current_url := .Permalink -}}
+      {{- $sch_all_dir_kv := newScratch -}}
+      {{/* 记录所有的文件夹  */}}
+      {{- $sch_all_names := newScratch -}}
+      {{/* 记录目录是否需要展开(目录拼接保证唯一性)   "expanded": ['ppath/path', 'ppath']*/}}
+      {{ $sch_expanded_folder :=  newScratch }}
+      {{/*  遍历wiki下的目录  */}}
+      {{- range (readDir "/content/wiki/") -}}
+        {{- if .IsDir -}}
+          {{/* 当前目录的名称，后续拼接地址需要  */}}
+          {{- $dirName := .Name -}}
+          {{/* 生成一个map:{ Name:目录名    }  */}}
+          {{- $sch_dir_item :=  newScratch -}}
+          {{- $sch_dir_item.Set "Name" .Name -}}
+          {{/* 记录所有的文件夹  */}}
+          {{- $sch_all_names.Add "names" (slice .Name) -}}
+          {{/* 记录所有的子分类名称  */}}
+          {{- $sch_collection_names :=  newScratch -}}
+          {{/* 记录子分类字典  key:文章title value:地址  */}}
+          {{- $sch_collection_post_kvs :=  newScratch -}}
+          {{/* 记录分类和title的关系  "分类": [title1,title2] */}}
+          {{ $sch_collection_kvs :=  newScratch }}
+          {{/* 遍历子文件夹,例如大分类 iOS*/}}
+          {{- range (readDir (printf "/content/wiki/%s" .Name) ) -}}
+            {{- if .IsDir -}}
+              {{/* 如果有子目录,遍历内容 */}}
+              {{ $ssFolderName := .Name }}
+              {{- range (readDir (printf "/content/wiki/%s/%s" $dirName .Name)) -}}
+                {{- with $.Site.GetPage (printf "/wiki/%s/%s/%s" $dirName $ssFolderName .Name) -}}
+                  {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
+                  {{/*md的title*/}}
+                  {{- $title :=  .Title -}}
+                  {{/*获取分类collection字段的参数,没有参数则当做空来处理: 处理结果,如果有collection则collection优先,如果没有，则按子目录分配。
+                  可以将判断去掉,以实现按子目录分类（子目录里面的让collection失效）*/}}
+                  {{/*{{- with .Params.collection -}}*/}}
+                  {{/*{{- $sch_collection_names.Add "names"  (slice . ) -}}*/}}
+                  {{/*{{- $sch_collection_kvs.Add . (slice $title ) -}}*/}}
+                  {{/*{{- else -}}*/}}
+                  {{- $sch_collection_names.Add "names" (slice $ssFolderName ) -}}
+                  {{- $sch_collection_kvs.Add $ssFolderName (slice $title ) -}}
+
+                  {{ if eq $current_url .Permalink }}
+                    {{- $sch_expanded_folder.Add "expanded"  (slice (printf "%s/%s" $dirName $ssFolderName) ) -}}
+                    {{- $sch_expanded_folder.Add "expanded"  (slice $dirName) -}}
+                  {{ end }}
+
+                  {{/*{{- end -}}*/}}
+                {{- end -}}
+              {{- end -}}
+            {{ else }}
+              {{/* 获取文件的详情。从这里入手,可以判断下是否是目录。 */}}
+              {{- with $.Site.GetPage (printf "/wiki/%s/%s" $dirName .Name) -}}
+                {{- $sch_collection_post_kvs.Set .Title  .Permalink -}}
+                {{/*md的title*/}}
+                {{- $title :=  .Title -}}
+                {{/*获取分类collection字段的参数,没有参数则当做空来处理*/}}
+                {{- with .Params.collection -}}
+                  {{- $sch_collection_names.Add "names"  (slice . ) -}}
+                  {{- $sch_collection_kvs.Add . (slice $title ) -}}
+                {{- else -}}
+                  {{- $sch_collection_kvs.Add "" (slice $title ) -}}
+                {{- end -}}
+
+                {{ if eq $current_url .Permalink }}
+                  {{- $sch_expanded_folder.Add "expanded"  (slice $dirName) -}}
+                {{ end }}
+
+              {{- end -}}
+            {{ end }}
+          {{- end -}}
+          {{- $sch_dir_item.Set "sch_collection_names" $sch_collection_names -}}
+          {{ $sch_dir_item.Set "sch_collection_post_kvs" $sch_collection_post_kvs }}
+          {{- $sch_dir_item.Set "sch_collection_kvs" $sch_collection_kvs -}}
+          {{- $sch_all_dir_kv.Set .Name $sch_dir_item -}}
+          {{- $sch_collection_names   = newScratch -}}
+          {{- $sch_collection_post_kvs =  newScratch -}}
+          {{- $sch_collection_kvs =  newScratch -}}
+        {{- end -}}
+      {{- end -}}
+      <!-- 忽略大小写排序 -->
+      {{- $.Scratch.Delete "lower_titles" -}}
+      {{- range $sch_all_names.Get "names" -}}
+        {{- $.Scratch.Add "lower_titles" (slice ( lower . ) ) -}}
+      {{- end -}}
+      {{- range sort ($.Scratch.Get "lower_titles") -}}
+        {{- $lower_int := . -}}
+        {{- range sort ($sch_all_names.Get "names") -}}
+          {{- if eq $lower_int (lower .) -}}
+            <li class="directory">
+              {{/* 判断是否需要展开,显示不同图片*/}}
+              <a href="#" data-role="directory">
+                {{if in  ($sch_expanded_folder.Get "expanded") . }}
+                  <i class="fa fa-angle-down"></i>
+                {{else}}
+                  <i class="fa fa-angle-right"></i>
+                {{ end }}
+                {{.}}
+              </a>
+              <ul {{if  not  ( in ($sch_expanded_folder.Get "expanded") . ) }}
+                style="display: none"
+              {{end}}
+              >
+                {{- $folder_name := . -}}
+                {{- $item := $sch_all_dir_kv.Get . -}}
+                {{-  $sch_collection_kvs := $item.Get "sch_collection_kvs" -}}
+                {{-  $sch_collection_post_kvs := $item.Get "sch_collection_post_kvs" -}}
+                {{-  $sch_collection_names := $item.Get "sch_collection_names" -}}
+                {{- range sort ($sch_collection_kvs.Get "") -}}
+                  <li class="file">
+                    <a href="{{ $sch_collection_post_kvs.Get . }}">{{.}}</a>
+                  </li>
+                {{- end -}}
+                {{- range sort (uniq ($sch_collection_names.Get "names")) -}}
+                  <li class="directory">
+                    <a href="#" data-role="directory">
+                      <i class="fa fa-angle-right"></i>
+                      {{.}}
+                    </a>
+                    <ul {{if  not (in  ($sch_expanded_folder.Get "expanded") (printf "%s/%s" $folder_name . )) }}
+                      style="display: none"
+                    {{end}}
+                    >
+                      {{- $lxist := sort ($sch_collection_kvs.Get . ) -}}
+                      {{- range $index, $element := $lxist -}}
+                        <li class="file">
+                          <a href="{{ $sch_collection_post_kvs.Get . }}">{{ $element }}</a>
+                        </li>
+                      {{- end -}}
+                    </ul>
+                  </li>
+                {{- end -}}
+              </ul>
+            </li>
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    </ul>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      var r = "fa-angle-down",
+              i = "fa-angle-right",
+              l = "fa-angle-double-down",
+              d = "fa-angle-double-up";
+      $(document).on("click", '#categories a[data-role="directory"]', function (
+              a
+      ) {
+        a.preventDefault();
+        var e = $(this).children(".fa"),
+                s = e.hasClass(r),
+                l = $(this).siblings("ul");
+        e.removeClass(r).removeClass(i),
+                s
+                        ? (void 0 !== l && l.slideUp({duration: 100}), e.addClass(i))
+                        : (void 0 !== l && l.slideDown({duration: 100}), e.addClass(r));
+      }),
+              $('#categories a[data-role="directory"]').bind("contextmenu", function (
+                      a
+              ) {
+                a.preventDefault();
+                var e = $(this).children(".fa"),
+                        s = e.hasClass(r),
+                        l = $(this).siblings("ul"),
+                        d = $.merge(l.find("li ul"), l),
+                        o = $.merge(l.find(".fa"), e);
+                o.removeClass(r).removeClass(i),
+                        s
+                                ? (d.slideUp({duration: 100}), o.addClass(i))
+                                : (d.slideDown({duration: 100}), o.addClass(r));
+              }),
+              $(document).on("click", "#allExpand", function (a) {
+                a.preventDefault();
+                var e = $(this).children(".fa"),
+                        s = e.hasClass(l);
+                e.removeClass(l).removeClass(d),
+                        s
+                                ? ($("#sidebar .fa.fa-angle-right")
+                                        .removeClass("fa-angle-right")
+                                        .addClass("fa-angle-down"),
+                                        $("#categories li ul").slideDown({duration: 100}),
+                                        e.addClass(d))
+                                : ($("#sidebar .fa.fa-angle-down")
+                                        .removeClass("fa-angle-down")
+                                        .addClass("fa-angle-right"),
+                                        $("#categories li ul").slideUp({duration: 100}),
+                                        e.addClass(l));
+              });
+      var qr = $("a[href='" + window.location.href + "']");
+      qr.css('font-weight', '800');
+      if (qr && qr[0]) {
+        var offsetTop = qr[0].getBoundingClientRect().top;
+        if (offsetTop > window.outerHeight / 2) {
+          $('#sidebar').animate({
+            scrollTop: offsetTop - window.outerHeight / 2
+          }, 100);
+        }
+      }
+      var offset = sessionStorage.getItem('asideOffset');
+
+      console.log(sessionStorage.getItem('asideOffset'));
+      sessionStorage.setItem('asideOffset', 'value');
+
+    });
+  </script>
+</aside>
+
+{{/* todo: add index /  add overview（按时间排序）*/}}
+
+
+
+
+
+
+
+
